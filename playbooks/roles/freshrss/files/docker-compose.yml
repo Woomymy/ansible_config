@@ -1,7 +1,7 @@
 ---
 services:
   app:
-    image: freshrss/freshrss:1.26.2-alpine
+    image: freshrss/freshrss:1.26.3-alpine
     restart: always
     env_file: .env
     volumes:

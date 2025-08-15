@@ -16,7 +16,7 @@ services:
       - db
 
   db:
-    image: postgres:17.5-alpine
+    image: postgres:17.6-alpine
     env_file: .env
     restart: always
     volumes:

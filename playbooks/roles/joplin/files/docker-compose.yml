@@ -1,7 +1,7 @@
 ---
 services:
   app:
-    image: joplin/server:3.4.2
+    image: joplin/server:3.4.3
     env_file: .env
     restart: always
     ports:

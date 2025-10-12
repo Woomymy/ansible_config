@@ -9,11 +9,11 @@ services:
     depends_on:
       - db
   db:
-    image: postgres:17.6-alpine
+    image: postgres:18.0-alpine
     env_file: .env
     restart: always
     volumes:
-      - joplin-postgres:/var/lib/postgresql/data
+      - joplin-postgres:/var/lib/postgresql/
     ports:
       - 127.0.0.1:6901:5432
 

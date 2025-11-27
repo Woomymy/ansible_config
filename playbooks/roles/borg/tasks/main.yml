@@ -2,7 +2,7 @@
 # PostgreSQL is needed by borg for running pg_dump
 - name: Install PostgreSQL
   ansible.builtin.dnf:
-    name: postgresql17
+    name: postgresql18
     state: latest
 
 # Build dependency

@@ -5,7 +5,7 @@ collections:
 roles:
   - name: konstruktoid.docker_rootless
     src: https://github.com/konstruktoid/ansible-role-docker-rootless
-    version: v1.4.0
+    version: v1.8.0
   - name: borgbase.ansible_role_borgbackup
     src: https://github.com/borgbase/ansible-role-borgbackup
     version: v1.1.3

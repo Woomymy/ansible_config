@@ -23,7 +23,7 @@ services:
       - fiibot-moderation-postgres:/var/lib/postgresql/
 
   redis:
-    image: valkey/valkey:9.0.0-alpine
+    image: valkey/valkey:9.0.1-alpine
     restart: always
     volumes:
       - /etc/timezone:/etc/timezone:ro

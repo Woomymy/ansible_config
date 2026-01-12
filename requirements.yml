@@ -8,4 +8,4 @@ roles:
     version: v1.10.0
   - name: borgbase.ansible_role_borgbackup
     src: https://github.com/borgbase/ansible-role-borgbackup
-    version: v1.1.3
+    version: v1.2.0

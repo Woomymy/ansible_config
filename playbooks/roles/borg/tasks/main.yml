@@ -25,6 +25,17 @@
     # We backup postgres databases using hooks
     borg_exclude_patterns:
       - sh:{{ docker_user_info.home }}/.local/share/docker/volumes/*-postgres*
+    borgmatic_custom_config:
+      ntfy:
+        topic: "{{ borg_ntfy_topic }}"
+        server: "{{ borg_ntfy_server }}"
+        fail:
+          title: Echec de la sauvegarde
+          message: La sauvegarde borgmatic ne s'est pas passee correctement
+          tags: borgmatic,skull
+          priority: max
+        states:
+          - fail
     borgmatic_hooks:
       before_backup:
         - echo "`date` - Starting backup."

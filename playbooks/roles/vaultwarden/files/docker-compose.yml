@@ -1,7 +1,7 @@
 ---
 services:
   web:
-    image: vaultwarden/server:1.35.2-alpine
+    image: vaultwarden/server:1.35.3-alpine
     env_file: .env
     ports:
       - 127.0.0.1:3002:80

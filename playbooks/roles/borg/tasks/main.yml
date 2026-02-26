@@ -43,11 +43,6 @@
         - echo "`date` - Finished backup."
         - ssh -p {{ borg_ssh_port }} {{ borg_ssh_user }}@{{ borg_ssh_host }} 'sudo poweroff'
       postgresql_databases:
-        - name: joplin
-          hostname: 127.0.0.1
-          port: 6901
-          password: "{{ joplin_postgres_pw }}"
-          username: joplin
         - name: nextcloud
           hostname: 127.0.0.1
           port: 6902

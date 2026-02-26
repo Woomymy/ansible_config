@@ -1,6 +1,0 @@
-{{ joplin_main_domain }} {{ joplin_all_domains }} {
-    import common
-    # Prevent joplin fail2ban
-    log_skip *
-    reverse_proxy localhost:3003
-}

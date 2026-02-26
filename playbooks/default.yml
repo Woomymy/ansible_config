@@ -14,12 +14,6 @@
     docker_user: docker
     services_dirname: services
 
-    # Joplin
-    joplin_proto: https
-    joplin_main_domain: joplin.{{ woomy_domain }}
-    joplin_all_domains: www.{{ joplin_main_domain }} joplin.{{ colle_domain }}
-    joplin_mailer_noreply: joplin@{{ woomy_domain }}
-
     # NextCloud
     nextcloud_domain: nextcloud.{{ woomy_domain }}
     nextcloud_trusted_domains: www.{{ nextcloud_domain }} nextcloud.{{ colle_domain }}
@@ -58,7 +52,6 @@
       tags:
         - docker
         - vaultwarden
-        - joplin
         - nextcloud
         - fiibot_id
         - fiibot_interservers
@@ -66,8 +59,6 @@
         - fiibot_moderation
     - role: vaultwarden
       tags: vaultwarden
-    - role: joplin
-      tags: joplin
     - role: static
       tags: static
     - role: nextcloud

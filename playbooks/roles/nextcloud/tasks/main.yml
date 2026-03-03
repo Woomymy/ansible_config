@@ -19,6 +19,14 @@
     dest: "{{ nextcloud_dir }}/docker-compose.yml"
     mode: "0755"
 
+- name: Copy php fpm tuning config
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.copy:
+    src: php-fpm-tuning.conf
+    dest: "{{ nextcloud_dir }}/php-fpm-tuning.conf"
+    mode: "0755"
+
 - name: Copy env file
   become: true
   become_user: "{{ docker_user }}"

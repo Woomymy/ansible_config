@@ -11,7 +11,7 @@ services:
       - db
       - redis
   caddy:
-    image: caddy:2.11.1-alpine
+    image: caddy:2.11.2-alpine
     restart: always
     volumes:
       - nextcloud-data:/var/www/html:ro

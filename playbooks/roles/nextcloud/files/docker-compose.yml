@@ -6,7 +6,7 @@ services:
     env_file: .env
     volumes:
       - nextcloud-data:/var/www/html
-      - ./php-fpm-tuning.conf:/usr/local/etc/php-fpm.d/php-fpm-tuning.conf:ro
+      - ./php-fpm-tuning.conf:/usr/local/etc/php-fpm.d/zz-php-fpm-tuning.conf:ro
     depends_on:
       - db
       - redis

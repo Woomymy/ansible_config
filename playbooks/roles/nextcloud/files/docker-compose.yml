@@ -19,7 +19,7 @@ services:
     ports:
       - 3004:80
   db:
-    image: postgres:18.3-alpine
+    image: postgres:18.4-alpine
     restart: always
     env_file: .env
     ports:

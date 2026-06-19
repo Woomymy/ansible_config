@@ -1,0 +1,16 @@
+services:
+  app:
+    image: grafana/grafana:13.1.0-25530058790
+    ports:
+      - 3005:3000
+    env_file: .env
+    restart: always
+    volumes:
+      - data:/var/lib/grafana
+      - ./conf.ini:/etc/grafana/grafana.ini:ro
+      - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+    extra_hosts:
+      - "host.docker.internal:10.0.2.2"
+
+volumes:
+  data:

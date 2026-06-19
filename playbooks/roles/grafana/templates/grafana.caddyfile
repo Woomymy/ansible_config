@@ -1,0 +1,4 @@
+{{ grafana_domain }} {
+    import common
+    reverse_proxy localhost:3005
+}

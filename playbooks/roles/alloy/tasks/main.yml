@@ -1,0 +1,82 @@
+---
+- name: Install Alloy
+  ansible.builtin.include_role:
+    name: grafana.grafana.alloy
+  vars:
+    prometheus_url: http://localhost:9090
+    loki_url: http://localhost:3100
+    alloy_user_groups:
+      - docker
+    alloy_config: |
+      prometheus.exporter.unix "local" {}
+
+      prometheus.scrape "node_exporter" {
+        targets = prometheus.exporter.unix.local.targets
+        forward_to = [prometheus.remote_write.prom.receiver]
+      }
+
+      prometheus.remote_write "prom" {
+        endpoint {
+          url = "{{ prometheus_url }}/api/v1/write"
+        }
+      }
+
+      loki.source.journal "journal" {
+        forward_to = [loki.write.local_loki.receiver]
+        relabel_rules = loki.relabel.journal.rules
+        labels = {component = "loki.source.journal"}
+      }
+
+      loki.relabel "journal" {
+        forward_to = []
+        rule {
+          source_labels = ["__journal__systemd_unit"]
+          target_label  = "unit"
+        }
+      }
+
+      loki.write "local_loki" {
+        endpoint {
+          url = "{{ loki_url }}/loki/api/v1/push"
+        }
+      }
+
+      discovery.docker "linux" {
+        host = "unix:///run/user/{{ docker_user_info.uid }}/docker.sock"
+      }
+
+      discovery.relabel "logs_integrations_docker" {
+        targets = []
+
+        rule {
+          source_labels = ["__meta_docker_container_name"]
+          regex = "/(.*)"
+          target_label = "service_name"
+        }
+      }
+
+      loki.source.docker "default" {
+        host       = "unix:///run/user/{{ docker_user_info.uid }}/docker.sock"
+        targets    = discovery.docker.linux.targets
+        labels     = {"platform" = "docker"}
+        relabel_rules = discovery.relabel.logs_integrations_docker.rules
+        forward_to = [loki.write.local_loki.receiver]
+      }
+
+- name: Install alloy docker acl service
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.template:
+    src: alloy-docker-acl.service.j2
+    dest: "{{ docker_user_info.home }}/.config/systemd/user/alloy-docker-acl.service"
+    mode: "0600"
+
+- name: Enable and start docker acl service
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.systemd:
+    name: alloy-docker-acl.service
+    enabled: true
+    state: started
+    scope: user
+    daemon_reload: true

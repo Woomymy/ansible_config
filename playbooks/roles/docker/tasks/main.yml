@@ -11,6 +11,7 @@
     docker_compose: true
     docker_allow_privileged_ports: true
     docker_rootless_service_template: docker_rootless.service.custom.j2
+    docker_daemon_json_template: daemon.custom.json.j2
 
 - name: Set services homedir variable
   ansible.builtin.set_fact:

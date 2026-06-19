@@ -1,0 +1,41 @@
+---
+- name: Set Prometheus service's home path
+  ansible.builtin.set_fact:
+    prometheus_dir: "{{ services_homedir }}/prometheus"
+
+- name: Create the Prometheus services's dir
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.file:
+    path: "{{ prometheus_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy docker-compose.yml
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ prometheus_dir }}/docker-compose.yml"
+    mode: "0755"
+
+- name: Copy Prometheus's config file to the Docker environment
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.copy:
+    src: prometheus.yml
+    dest: "{{ prometheus_dir }}/prometheus.yml"
+    mode: "0755"
+  notify: Restart prometheus
+
+- name: Start Prometheus
+  become: true
+  become_user: "{{ docker_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ docker_user_info.uid }}
+    PATH: "{{ docker_user_info.home }}/bin:{{ ansible_env.PATH }}"
+    DOCKER_HOST: unix:///run/user/{{ docker_user_info.uid }}/docker.sock
+  community.docker.docker_compose_v2:
+    project_src: "{{ prometheus_dir }}"
+    state: present
+    remove_orphans: true

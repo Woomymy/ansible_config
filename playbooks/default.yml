@@ -24,6 +24,11 @@
     vaultwarden_main_domain: bitwarden.{{ woomy_domain }}
     vaultwarden_all_domains: www.bitwarden.{{ woomy_domain }}
     vaultwarden_smtp_from: vaultwarden@{{ woomy_domain }}
+
+    # Grafana
+    grafana_domain: metrics.woomy.be
+    grafana_proto: https
+    grafana_user_name: owner
   roles:
     - role: timezone
       tags: sysconfig
@@ -51,12 +56,16 @@
     - role: docker
       tags:
         - docker
+        - borg
         - vaultwarden
         - nextcloud
         - fiibot_id
         - fiibot_interservers
         - fiibot_logger
         - fiibot_moderation
+        - prometheus
+        - grafana
+        - alloy
     - role: vaultwarden
       tags: vaultwarden
     - role: static
@@ -73,3 +82,11 @@
       tags: fiibot_moderation
     - role: borg
       tags: borg
+    - role: loki
+      tags: loki
+    - role: alloy
+      tags: alloy
+    - role: prometheus
+      tags: prometheus
+    - role: grafana
+      tags: grafana

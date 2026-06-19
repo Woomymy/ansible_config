@@ -1,0 +1,4 @@
+---
+- name: Install Loki
+  ansible.builtin.include_role:
+    name: grafana.grafana.loki

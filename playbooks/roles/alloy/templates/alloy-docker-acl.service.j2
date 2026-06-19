@@ -1,0 +1,17 @@
+[Unit]
+Description=Grant alloy access to rootless docker socket
+After=docker.service
+Wants=docker.service
+
+# Restart when docker is restarted
+PartOf=docker.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/bash -lc 'for i in {1..30}; do [ -S /run/user/{{ docker_user_info.uid }}/docker.sock ] && exit 0; sleep 1; done; exit 1'
+ExecStart=/usr/bin/setfacl -m u:alloy:x /run/user/{{ docker_user_info.uid }}
+ExecStart=/usr/bin/setfacl -m u:alloy:rw /run/user/{{ docker_user_info.uid }}/docker.sock
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

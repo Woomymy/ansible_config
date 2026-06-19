@@ -1,3 +1,4 @@
+---
 apiVersion: 1
 
 datasources:
@@ -11,10 +12,10 @@ datasources:
       allowAsRecordingRulesTarget: true
       prometheusType: Prometheus
       prometheusVersion: 3.11.0
-      cacheLevel: 'High'
+      cacheLevel: High
       disableRecordingRules: false
       seriesEndpoint: false
-      timeInterval: 10s # Prometheus scrape interval
+      timeInterval: 10s
       incrementalQueryOverlapWindow: 10m
 
   - name: Loki

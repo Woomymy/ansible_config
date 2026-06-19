@@ -1,3 +1,4 @@
+---
 services:
   prometheus:
     image: prom/prometheus:v3.11.3-distroless
@@ -5,13 +6,14 @@ services:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - data:/prometheus
     restart: always
     ports:
       - 127.0.0.1:9090:9090
     extra_hosts:
-      - "host.docker.internal:10.0.2.2"
+      - host.docker.internal:10.0.2.2
 
 volumes:
   data:
+    driver: local

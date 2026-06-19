@@ -1,3 +1,4 @@
+---
 services:
   app:
     image: grafana/grafana:13.1.0-25530058790
@@ -10,7 +11,8 @@ services:
       - ./conf.ini:/etc/grafana/grafana.ini:ro
       - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
     extra_hosts:
-      - "host.docker.internal:10.0.2.2"
+      - host.docker.internal:10.0.2.2
 
 volumes:
   data:
+    driver: local

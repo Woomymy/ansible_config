@@ -32,7 +32,7 @@
   become_user: "{{ docker_user }}"
   environment:
     XDG_RUNTIME_DIR: /run/user/{{ docker_user_info.uid }}
-    PATH: "{{ docker_user_info.home }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ docker_user_info.home }}/bin:{{ ansible_facts['env']['PATH'] }}"
     DOCKER_HOST: unix:///run/user/{{ docker_user_info.uid }}/docker.sock
   community.docker.docker_compose_v2:
     project_src: "{{ fiibot_logger_dir }}"

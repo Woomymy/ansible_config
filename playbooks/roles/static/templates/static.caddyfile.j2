@@ -15,6 +15,18 @@ files.{{ woomy_domain }} www.files.{{ woomy_domain }} {
     import common
     handle {
         root * {{ static_path }}/files
-        file_server browse
+        file_server browse {
+            hide *.pdf
+        }
     }
 }
+
+www.{{ colle_domain }} {{ colle_domain }} {
+    import common
+    handle {
+        root * {{ static_path }}/files
+        rewrite * /cv-colle.pdf
+        file_server
+    }
+}
+

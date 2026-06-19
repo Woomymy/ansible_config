@@ -15,59 +15,69 @@
   ansible.builtin.import_role:
     name: borgbase.ansible_role_borgbackup
   vars:
-    borgmatic_relocated_repo_access_is_ok: true
-    borgmatic_timer: systemd
-    borgmatic_timer_hour: 03
-    borgmatic_timer_minute: 05
-    borg_source_directories:
-      - "{{ docker_user_info.home }}/.local/share/docker/volumes/"
-      - /var/www/files
-    # We backup postgres databases using hooks
-    borg_exclude_patterns:
-      - sh:{{ docker_user_info.home }}/.local/share/docker/volumes/*-postgres*
-    borgmatic_custom_config:
-      ntfy:
-        topic: "{{ borg_ntfy_topic }}"
-        server: "{{ borg_ntfy_server }}"
-        fail:
-          title: Echec de la sauvegarde
-          message: La sauvegarde borgmatic ne s'est pas passee correctement
-          tags: borgmatic,skull
-          priority: max
-        states:
-          - fail
-    borgmatic_hooks:
-      before_backup:
-        - echo "`date` - Starting backup."
-      after_everything:
-        - echo "`date` - Finished backup."
-        - ssh -p {{ borg_ssh_port }} {{ borg_ssh_user }}@{{ borg_ssh_host }} 'sudo poweroff'
-      postgresql_databases:
-        - name: nextcloud
-          hostname: 127.0.0.1
-          port: 6902
-          password: "{{ nextcloud_postgres_pw }}"
-          username: nextcloud
-        - name: fiibot-id
-          hostname: 127.0.0.1
-          port: 6903
-          password: "{{ fiibot_id_postgres_pw }}"
-          username: fiibot-id
-        - name: fiibot-interservers
-          hostname: 127.0.0.1
-          port: 6904
-          password: "{{ fiibot_interservers_postgres_pw }}"
-          username: fiibot-interservers
-        - name: fiibot-logger
-          hostname: 127.0.0.1
-          port: 6905
-          password: "{{ fiibot_logger_postgres_pw }}"
-          username: fiibot-logger
-        - name: fiibot-moderation
-          hostname: 127.0.0.1
-          port: 6906
-          password: "{{ fiibot_moderation_postgres_pw }}"
-          username: fiibot-moderation
+    borgbackup_timer:
+      type: systemd
+      hour: 03
+      minute: 05
+    borgbackup_install:
+      method: package
+    borgbackup_config:
+      encryption_passphrase: "{{ borg_config.encryption_passphrase }}"
+      repositories: "{{ borg_config.repositories }}"
+      source_directories:
+        - "{{ docker_user_info.home }}/.local/share/docker/volumes/"
+        - /var/www/files
+      # We backup postgres databases using hooks
+      exclude_patterns:
+        - sh:{{ docker_user_info.home }}/.local/share/docker/volumes/*-postgres*
+      extra:
+        ntfy:
+          topic: "{{ borg_ntfy_topic }}"
+          server: "{{ borg_ntfy_server }}"
+          fail:
+            title: Echec de la sauvegarde
+            message: La sauvegarde borgmatic ne s'est pas passee correctement
+            tags: borgmatic,skull
+            priority: max
+          states:
+            - fail
+      hooks:
+        postgresql_databases:
+          - name: nextcloud
+            hostname: 127.0.0.1
+            port: 6902
+            password: "{{ nextcloud_postgres_pw }}"
+            username: nextcloud
+          - name: fiibot-id
+            hostname: 127.0.0.1
+            port: 6903
+            password: "{{ fiibot_id_postgres_pw }}"
+            username: fiibot-id
+          - name: fiibot-interservers
+            hostname: 127.0.0.1
+            port: 6904
+            password: "{{ fiibot_interservers_postgres_pw }}"
+            username: fiibot-interservers
+          - name: fiibot-logger
+            hostname: 127.0.0.1
+            port: 6905
+            password: "{{ fiibot_logger_postgres_pw }}"
+            username: fiibot-logger
+          - name: fiibot-moderation
+            hostname: 127.0.0.1
+            port: 6906
+            password: "{{ fiibot_moderation_postgres_pw }}"
+            username: fiibot-moderation
+        commands:
+          - before: action
+            when:
+              - create
+            run:
+              - echo "`date` - Starting backup"
+          - after: everything
+            run:
+              - echo "`date` - Finished backup"
+              - ssh -p {{ borg_ssh_port }} {{ borg_ssh_user }}@{{ borg_ssh_host }} 'sudo poweroff'
 
 - name: Start and enable borgmatic.timer
   ansible.builtin.systemd:

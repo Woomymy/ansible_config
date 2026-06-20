@@ -1,5 +1,12 @@
 # Caddy Webserver config file
 
+{
+    admin 0.0.0.0:2019
+    metrics {
+        per_host
+    }
+}
+
 (common) {
     encode zstd gzip
     header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"

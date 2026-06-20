@@ -59,6 +59,7 @@
     src: Caddyfile
     dest: /etc/caddy/Caddyfile
     mode: "0755"
+  notify: Restart caddy.service
 
 - name: Create caddy log directory
   ansible.builtin.file:

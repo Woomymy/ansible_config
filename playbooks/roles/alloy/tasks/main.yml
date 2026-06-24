@@ -8,7 +8,9 @@
     alloy_user_groups:
       - docker
     alloy_config: |
-      prometheus.exporter.unix "local" {}
+      prometheus.exporter.unix "local" {
+        enable_collectors = ["cpu", "meminfo", "filesystem", "systemd", "netdev"]
+      }
 
       prometheus.scrape "node_exporter" {
         targets = prometheus.exporter.unix.local.targets

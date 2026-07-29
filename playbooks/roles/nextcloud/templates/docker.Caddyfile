@@ -1,5 +1,11 @@
 # Adapted from https://github.com/nextcloud/docker/blob/master/.examples/docker-compose/with-nginx-proxy/postgres/fpm/web/nginx.conf
 
+{
+    servers {
+        trusted_proxies static 172.16.0.0/12
+    }
+}
+
 :80 {
     root * /var/www/html
     file_server

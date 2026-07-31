@@ -4,8 +4,8 @@ Description=Nextcloud cron.php job
 
 [Service]
 Environment="DOCKER_HOST=unix:///run/user/{{ docker_user_info.uid }}/docker.sock"
-Environment="PATH={{ docker_user_info.home }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="PATH={{ docker_user_info.home }}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Environment="XDG_RUNTIME_DIR=/run/user/{{ docker_user_info.uid }}"
-ExecCondition={{ docker_user_info.home }}/bin/docker compose -f {{ nextcloud_dir }}/docker-compose.yml exec -u www-data app php -f /var/www/html/occ status -e
-ExecStart={{ docker_user_info.home }}/bin/docker compose -f {{ nextcloud_dir }}/docker-compose.yml exec -u www-data app php -f /var/www/html/cron.php
+ExecCondition={{ docker_user_info.home }}/.local/bin/docker compose -f {{ nextcloud_dir }}/docker-compose.yml exec -u www-data app php -f /var/www/html/occ status -e
+ExecStart={{ docker_user_info.home }}/.local/bin/docker compose -f {{ nextcloud_dir }}/docker-compose.yml exec -u www-data app php -f /var/www/html/cron.php
 KillMode=process

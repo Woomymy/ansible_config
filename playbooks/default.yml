@@ -67,6 +67,7 @@
         - prometheus
         - grafana
         - alloy
+        - hananas_website
     - role: vaultwarden
       tags: vaultwarden
     - role: static
@@ -91,3 +92,5 @@
       tags: prometheus
     - role: grafana
       tags: grafana
+    - role: hananas_website
+      tags: hananas_website

@@ -1,0 +1,6 @@
+services:
+  website:
+    image: ghcr.io/hana-curry/portfolio:v0.1.0
+    restart: always
+    ports:
+      - 127.0.0.1:6907:3000

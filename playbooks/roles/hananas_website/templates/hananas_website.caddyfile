@@ -1,0 +1,4 @@
+www.{{ colle_domain }} {{ colle_domain }} {
+    import common
+    reverse_proxy localhost:6907
+}

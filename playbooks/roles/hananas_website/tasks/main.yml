@@ -1,0 +1,40 @@
+---
+- name: Set services home path
+  ansible.builtin.set_fact:
+    hananas_website_dir: "{{ services_homedir }}/hananas-website"
+
+- name: Create Hananas's website docker-compose directory
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.file:
+    path: "{{ hananas_website_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy docker-compose.yml
+  become: true
+  become_user: "{{ docker_user }}"
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ hananas_website_dir }}"
+    mode: "0755"
+
+- name: Copy caddy site configuration
+  ansible.builtin.template:
+    src: hananas_website.caddyfile
+    dest: /etc/caddy/sites/hananas_website.caddyfile
+    mode: "0755"
+  notify:
+    - Restart caddy.service
+
+- name: Start Hananas's website
+  become: true
+  become_user: "{{ docker_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ docker_user_info.uid }}
+    PATH: "{{ docker_user_info.home }}/.local/bin:{{ ansible_facts['env']['PATH'] }}"
+    DOCKER_HOST: unix:///run/user/{{ docker_user_info.uid }}/docker.sock
+  community.docker.docker_compose_v2:
+    project_src: "{{ hananas_website_dir }}"
+    state: present
+    remove_orphans: true

@@ -1,3 +1,4 @@
+---
 services:
   website:
     image: ghcr.io/hana-curry/portfolio:v0.1.0

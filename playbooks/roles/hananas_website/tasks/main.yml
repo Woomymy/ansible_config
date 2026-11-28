@@ -1,3 +1,4 @@
+---
 - name: Set services home path
   ansible.builtin.set_fact:
     hananas_website_dir: "{{ services_homedir }}/hananas-website"
